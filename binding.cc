@@ -6,7 +6,6 @@
 #include <as400_types.h>
 using namespace Napi;
 
-
 #include <ctype.h>
 
 typedef struct
@@ -39,18 +38,17 @@ int to_37_spacepadded_nts(char *out, size_t out_len, const char *in)
 
   size_t inleft = strlen(in_buf);
   size_t outleft = out_len;
-   char *input = in_buf;
- char *output = out;
+  char *input = in_buf;
+  char *output = out;
 
   int rc = iconv(cd, &input, &inleft, &output, &outleft);
   if (rc == -1)
   {
     fprintf(stderr, "Error in converting characters\n");
-   return 9;
+    return 9;
   }
   return iconv_close(cd);
 }
-
 
 int qsygetph(const char *_username, const char *_pw, char *_handle_buf)
 {
@@ -64,14 +62,14 @@ int qsygetph(const char *_username, const char *_pw, char *_handle_buf)
   memset(handle, 0, sizeof(handle));
 
   static ILEpointer qsygetph_pgm __attribute__((aligned(16)));
-  static int qsygetph_pgm_loaded =0;
+  static int qsygetph_pgm_loaded = 0;
   int rc = -1;
   if (0 == qsygetph_pgm_loaded)
   {
-   rc = _RSLOBJ2(&qsygetph_pgm,
-                      RSLOBJ_TS_PGM,
-                      "QSYGETPH",
-                      "QSYS");
+    rc = _RSLOBJ2(&qsygetph_pgm,
+                  RSLOBJ_TS_PGM,
+                  "QSYGETPH",
+                  "QSYS");
     if (0 != rc)
     {
       return rc;
@@ -85,9 +83,9 @@ int qsygetph(const char *_username, const char *_pw, char *_handle_buf)
 
   int ccsid = _SETCCSID(-1);
   int pwlen = strlen(_pw);
- void *pgm_argv[] __attribute__((aligned(16))) = {
+  void *pgm_argv[] __attribute__((aligned(16))) = {
       &usrprf_ebcdic,
-      (void*)_pw,
+      (void *)_pw,
       &handle,
       &errinfo,
       &pwlen,
@@ -130,7 +128,7 @@ int qsyrlsph(char *_handle_buf)
     }
     qsyrlsph_pgm_loaded = 1;
   }
-  error_info_t errinfo  __attribute__((aligned(16), packed));
+  error_info_t errinfo __attribute__((aligned(16), packed));
   memset(&errinfo, 0, sizeof(errinfo));
   errinfo.bytes_provided = sizeof(errinfo);
   char *handle = _handle_buf;
@@ -148,9 +146,22 @@ int qsyrlsph(char *_handle_buf)
   return -1;
 }
 
+int isSpecialValue(const char *_pw)
+{
+  if (_pw == strstr(_pw, "*NOPWD"))
+  {
+    return 1;
+  }
+  return 0;
+}
 int validate_pw0(const char *_username, const char *_pw)
 {
-  if(0 == _pw) {
+  if (0 == _pw)
+  {
+    return -1;
+  }
+  if (isSpecialValue(_pw))
+  {
     return -1;
   }
   char handle[12];
@@ -161,24 +172,28 @@ int validate_pw0(const char *_username, const char *_pw)
   }
   return rc;
 }
-int validate_pw(std::string _username, std::string _password) {
+int validate_pw(std::string _username, std::string _password)
+{
   int rc = validate_pw0(_username.c_str(), _password.c_str());
   return rc;
 }
 
-Napi::String Method(const Napi::CallbackInfo& info) {
+Napi::String Method(const Napi::CallbackInfo &info)
+{
   Napi::Env env = info.Env();
   return Napi::String::New(env, "world");
 }
 
-Napi::Boolean doVerify(const Napi::CallbackInfo& info) {
+Napi::Boolean doVerify(const Napi::CallbackInfo &info)
+{
   Napi::Env env = info.Env();
   Napi::String username = info[0].ToString();
   Napi::String password = info[1].ToString();
-  return Napi::Boolean::New(env, 0==validate_pw( username.Utf8Value(), password.Utf8Value()));
+  return Napi::Boolean::New(env, 0 == validate_pw(username.Utf8Value(), password.Utf8Value()));
 }
 
-Napi::Object Init(Napi::Env env, Napi::Object exports) {
+Napi::Object Init(Napi::Env env, Napi::Object exports)
+{
   exports.Set(Napi::String::New(env, "verifyIbmiPw"),
               Napi::Function::New(env, doVerify));
   return exports;

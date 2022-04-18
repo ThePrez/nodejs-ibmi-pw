@@ -9,7 +9,7 @@
   "author": "Jesse Gorzinski",
   "license": "Apache-2.0",
   "gypfile": true,
-  "dependencies": {
+  "devDependencies": {
     "node-addon-api": "^4.2.0"
   },
   "files": [
@@ -18,5 +18,11 @@
     "*.md",
     "LICENSE",
     "build/Release/ibmi-pw-native.node"
+  ],
+  "keywords": [
+    "ibmi",
+    "IBM i",
+    "password",
+    "security"
   ]
 }

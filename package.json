@@ -1,6 +1,6 @@
 {
   "name": "ibmi-pw",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Password verifier for IBM i",
   "main": "lib/ibmi-pw.js",
   "scripts": {

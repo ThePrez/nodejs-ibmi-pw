@@ -1,4 +1,4 @@
-# nodejs-ibmi-pw
+# IBM i Password Verifier (ibmi-pw)
 Simple IBM i Password Validation module for npm. Can be used to check whether a provided user name (IBM i user profile)
 and password are valid. 
 **This module only works on IBM i!**

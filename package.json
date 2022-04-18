@@ -1,0 +1,15 @@
+{
+  "name": "ibmi-pw",
+  "version": "0.0.1",
+  "description": "Password verifier for IBM i",
+  "main": "lib/ibmi-pw.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jesse Gorzinski",
+  "license": "ISC",
+  "gypfile": true,
+  "dependencies": {
+    "node-addon-api": "^4.2.0"
+  }
+}

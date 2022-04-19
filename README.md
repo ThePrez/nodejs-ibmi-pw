@@ -16,12 +16,12 @@ npm install ibmi-pw
 # Usage
 ```javascript
 var validator = require('ibmi-pw')
-console.log("Is password valid? "+ validator.verifyIbmiPw("jgorzins","mypassword"));
+console.log("Is password valid? "+ validator.verifyIbmiPw("usrprf","mypassword"));
 ```
 
 # Prohibited IBM i user profiles
 
-You cannot validate a pssword for the following system-supplied user profiles:
+You cannot validate a password for the following system-supplied user profiles:
 - QAUTPROF
 - QDLFM
 - QMSF
